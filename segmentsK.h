@@ -1,0 +1,1 @@
+void printS(int H, int M, int S);
