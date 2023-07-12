@@ -1,26 +1,29 @@
-#include <string.h>
+#include "Segments.h"
 #include <time.h>
-#include "segmentsK.h"
+#include <string.h>
+#include <unistd.h>
+//#include <Windows.h>
 
-int main()
+int main (int argc, char *argv[])
 {
-    time_t rawtime;
-    struct tm *info;
-    char buffer[9], cache[9];
-
-    while (1)
-    {
-        time(&rawtime);
-        info = localtime(&rawtime);
-        strftime(buffer, 9, "%H:%M:%S", info);
-        if (buffer[7] != cache[7])
-        {
-            printS((((int)buffer[0] - 48) * 10) + ((int)buffer[1] - 48),
-                   (((int)buffer[3] - 48) * 10) + ((int)buffer[4] - 48),
-                   (((int)buffer[6] - 48) * 10) + ((int)buffer[7] - 48));
-            strcpy(cache, buffer);
-        }
-    }
-
-    return (0);
+	time_t t = time(NULL);
+	struct tm tm = *localtime(&t);
+	char hour[3][2] = {{tm.tm_hour/10 + '0', tm.tm_hour%10 + '0'},
+			{tm.tm_min/10 + '0', tm.tm_min%10 + '0'},
+			{tm.tm_sec/10 + '0', tm.tm_sec%10 + '0'}};
+	print(hour[0]);
+	while (1)
+	{
+		t = time(NULL);
+		tm = *localtime(&t);
+		hour[0][0] = tm.tm_hour/10 + '0';
+		hour[0][1] = tm.tm_hour%10 + '0';
+		hour[1][0] = tm.tm_min/10 + '0';
+		hour[1][1] = tm.tm_min%10 + '0';
+		hour[2][0] = tm.tm_sec/10 + '0';
+		hour[2][1] = tm.tm_sec%10 + '0';
+		print(hour[0]);
+		sleep(1);
+	}
+	return 0;
 }
